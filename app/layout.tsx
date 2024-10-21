@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Vazirmatn } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/navbar/Navbar";
+import { ThemeProvider } from "../components/theme-provider";
 
 const inter = Vazirmatn({ subsets: ["arabic"] });
 
@@ -18,10 +19,16 @@ export default function RootLayout({
   return (
     <html lang="fa" dir="rtl">
       <body className={inter.className}>
-        <main className="min-h-screen Container">
-          <Navbar />
-          {children}
-        </main>
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="light"
+          enableSystem
+          disableTransitionOnChange>
+          <main className="min-h-screen Container">
+            <Navbar />
+            {children}
+          </main>
+        </ThemeProvider>
       </body>
     </html>
   );

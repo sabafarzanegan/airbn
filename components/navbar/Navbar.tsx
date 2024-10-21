@@ -5,7 +5,7 @@ import NavSearch from "./NavSearch";
 
 function Navbar() {
   return (
-    <nav className="flex items-center justify-between py-4">
+    <nav className="flex items-center justify-between py-8 border-b mb-6">
       <Logo />
       <NavSearch />
       <DarkMode />
