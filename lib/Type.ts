@@ -12,3 +12,9 @@ export const links: NavLinks[] = [
   { href: "/rentals", label: "اجاره شده" },
   { href: "/profile ", label: "پروفایل" },
 ];
+
+export type createProfileType = {
+  username: string;
+  lastName: string;
+  firstName: string;
+};
