@@ -104,3 +104,15 @@ export const fetchUser = async () => {
     profileImage: profile?.profileImage,
   };
 };
+
+export const uploadImageaction = async (formData: string) => {
+  const user = await getAuthuser();
+  await db.profile.update({
+    where: {
+      clerkId: user.id,
+    },
+    data: {
+      profileImage: formData,
+    },
+  });
+};

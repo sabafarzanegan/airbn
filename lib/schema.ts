@@ -6,3 +6,14 @@ export const createProfileSchema = z.object({
     .string()
     .min(4, { message: " نام خانوادگی حداقل باید دو حرف باشد" }),
 });
+
+const validation = () => {
+  const maxUploadSize = 1024 * 1024;
+  return z.instanceof(File).refine((file) => {
+    return !file || file.size <= maxUploadSize;
+  }, "حجم عکس باید کمتراز 1MBباشد");
+};
+
+export const ImageValidationFile = z.object({
+  ImageFile: validation(),
+});

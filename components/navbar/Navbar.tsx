@@ -1,4 +1,3 @@
-import { currentUser } from "@clerk/nextjs/server";
 import DarkMode from "./DarkMode";
 import LinksDropdown from "./LinksDropdown";
 import Logo from "./Logo";
