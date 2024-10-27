@@ -1,8 +1,16 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   images: {
-    domains: ["img.clerk.com"],
-    domains: ["npubsfsnwzoctizdjhvn.supabase.co"],
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "img.clerk.com",
+      },
+      {
+        protocol: "https",
+        hostname: "npubsfsnwzoctizdjhvn.supabase.co",
+      },
+    ],
   },
 };
 
