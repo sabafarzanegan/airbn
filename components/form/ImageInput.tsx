@@ -1,21 +1,27 @@
 "use client";
 import React, { useRef, useState } from "react";
-
 import { Button } from "../ui/button";
 import Image from "next/image";
-
 import { uploadImageaction } from "@/lib/actions/formAction";
-
 import { Label } from "../ui/label";
 import { UploadImameInSupabase } from "@/lib/supabase";
+import { toast } from "@/hooks/use-toast";
 
 function ImageInput({
   profilePicture,
 }: {
   profilePicture: string | undefined;
 }) {
+  const [isLoading, setIsloading] = useState(false);
   const [image, setImage] = useState({
-    file: null,
+    file: {
+      name: "",
+      lastModified: 0,
+      lastModifiedDate: "",
+      webkitRelativePath: "",
+      size: 0,
+      type: "",
+    },
     name: "",
     lastModified: 0,
     size: 0,
@@ -24,6 +30,7 @@ function ImageInput({
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files[0];
+    console.log(file);
 
     if (file) {
       setImage({
@@ -43,11 +50,20 @@ function ImageInput({
   };
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     try {
+      setIsloading(true);
       const path = await UploadImameInSupabase(image.file);
 
-      await uploadImageaction(path);
+      const data = await uploadImageaction(path);
+      console.log(data);
+
+      if (data?.success) {
+        toast({
+          description: data.message,
+        });
+        setIsloading(false);
+      }
     } catch (error) {
-      console.log(error);
+      setIsloading(false);
     }
   };
   return (
@@ -75,12 +91,11 @@ function ImageInput({
           ref={InputFileRef}
           className=""
         />
-        <Button type="submit">ذخیره عکس</Button>
+
+        <Button disabled={isLoading} type="submit">
+          {isLoading ? "درحال ارسال" : "ارسال"}
+        </Button>
       </form>
-      {/* 
-      <Button variant="outline" onClick={handleButtonClick}>
-        آپلود عکس جدید
-      </Button> */}
     </div>
   );
 }

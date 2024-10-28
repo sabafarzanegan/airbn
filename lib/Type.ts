@@ -19,4 +19,28 @@ export type createProfileType = {
   firstName: string;
 };
 
+export type FIleImage = {
+  name: string;
+  lastModified: number;
+  lastModifiedDate: string;
+  webkitRelativePath: string | undefined;
+  size: number;
+  type: string;
+};
 
+export type cityType = {
+  name: string;
+  center: string;
+  latitude: string;
+  longitude: string;
+  id: number;
+};
+
+export type PropertPropsCard = {
+  id: string;
+  image: string;
+  name: string;
+  tagline: string;
+  country: string;
+  price: number;
+};

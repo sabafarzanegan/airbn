@@ -1,9 +1,11 @@
 "use server";
 import { clerkClient, currentUser } from "@clerk/nextjs/server";
-import { createProfileType } from "../Type";
+import { createProfileType, FIleImage } from "../Type";
 import db from "../db";
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
+import { propertySchema } from "@/lib/schema";
+import { UploadImameInSupabase } from "../supabase";
 
 export const createProfileAction = async (formData: createProfileType) => {
   try {
@@ -53,7 +55,7 @@ export const fetchImageUser = async () => {
 export const getAuthuser = async () => {
   const user = await currentUser();
   if (!user) {
-    throw new Error("ابتدا باید وارد حساب کاربری خود شوید");
+    redirect("/profile/create");
   }
   if (!user.privateMetadata.hasProfile) return redirect("/profile/create");
   return user;
@@ -105,14 +107,86 @@ export const fetchUser = async () => {
   };
 };
 
-export const uploadImageaction = async (formData: string) => {
+export const uploadImageaction = async (data: string) => {
   const user = await getAuthuser();
-  await db.profile.update({
+  try {
+    await db.profile.update({
+      where: {
+        clerkId: user.id,
+      },
+      data: {
+        profileImage: data,
+      },
+    });
+    return { success: true, message: "تصویر شما با موفقیت آپلود شد" };
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const getCenter = async () => {
+  try {
+    const data = await fetch("https://iran-locations-api.ir/api/v1/fa/states", {
+      method: "GET",
+    });
+    if (data.status === 200) {
+      return await data.json();
+    }
+  } catch (error) {}
+};
+
+export const createPropertyAction = async (
+  formData: typeof propertySchema,
+  path
+) => {
+  const user = await getAuthuser();
+
+  console.log(formData);
+  try {
+    const data = await db.property.create({
+      data: {
+        ...formData,
+        profileId: user.id,
+        image: path,
+      },
+    });
+    console.log(data);
+    return { success: true, message: "آگهی شما با موفقیت ثبت شد" };
+
+    // console.log(path);
+  } catch (error) {
+    return {
+      success: false,
+      message: "مشکلی به وجود آمد لصفا دوباره تلاش کنید",
+    };
+  } finally {
+    redirect("/");
+  }
+};
+
+export const fetchProperties = async ({
+  search = "",
+  category,
+}: {
+  search?: string;
+  category?: string;
+}) => {
+  const properties = await db.property.findMany({
     where: {
-      clerkId: user.id,
+      category,
+      OR: [
+        { name: { contains: search, mode: "insensitive" } },
+        { tagline: { contains: search, mode: "insensitive" } },
+      ],
     },
-    data: {
-      profileImage: formData,
+    select: {
+      id: true,
+      name: true,
+      tagline: true,
+      country: true,
+      image: true,
+      price: true,
     },
   });
+  return properties;
 };

@@ -1,14 +1,13 @@
 import { createClient } from "@supabase/supabase-js";
+import { FIleImage } from "./Type";
 
 const bucket = "homeAway";
 
 const supabaseUrl = "https://npubsfsnwzoctizdjhvn.supabase.co";
-const supabaseKey = process.env.SUPABASE_KEY;
-const supabase = createClient(
-  supabaseUrl,
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5wdWJzZnNud3pvY3RpemRqaHZuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Mjk3NzI3OTMsImV4cCI6MjA0NTM0ODc5M30.CrnH2eZ138xjOQfXJVm2wU_tyVrPIIrcFOkAJYvqRZM"
-);
-export const UploadImameInSupabase = async (image) => {
+const supabaseKey = process.env.NEXT_PUBLIC_SUPABASEKEY;
+
+const supabase = createClient(supabaseUrl, supabaseKey as string);
+export const UploadImameInSupabase = async (image: FIleImage) => {
   const Timestamp = Date.now();
   const newName = `${Timestamp}-${image.name}`;
   const { data } = await supabase.storage
