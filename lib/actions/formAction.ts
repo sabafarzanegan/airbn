@@ -6,6 +6,7 @@ import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import { propertySchema } from "@/lib/schema";
 import { UploadImameInSupabase } from "../supabase";
+import { toast } from "@/hooks/use-toast";
 
 export const createProfileAction = async (formData: createProfileType) => {
   try {
@@ -188,5 +189,48 @@ export const fetchProperties = async ({
       price: true,
     },
   });
+  console.log(properties);
+
   return properties;
+};
+
+export const fetchFavoriteId = async ({
+  propertyId,
+}: {
+  propertyId: string;
+}) => {
+  const user = await getAuthuser();
+  const favoriteid = await db.favorites.findFirst({
+    where: {
+      propertyId: propertyId,
+      profileId: user.id,
+    },
+    select: {
+      id: true,
+    },
+  });
+  return favoriteid?.id || null;
+};
+export const handlerFavoriteAction = async (formData) => {
+  const user = await getAuthuser();
+  const propertyId = formData.get("propertyId");
+
+  const favoriteId = await fetchFavoriteId(propertyId);
+
+  if (favoriteId) {
+    const data = await db.favorites.delete({
+      where: {
+        id: favoriteId,
+      },
+    });
+    redirect("/");
+  } else {
+    await db.favorites.create({
+      data: {
+        propertyId,
+        profileId: user.id,
+      },
+    });
+    redirect("/");
+  }
 };

@@ -25,6 +25,7 @@ model Profile {
   createdAt    DateTime   @default(now())
   updatedAt    DateTime   @updatedAt
   properties Property[]
+  favorites    Favorites[]
 
 }
 
@@ -47,5 +48,20 @@ model Property {
   updatedAt   DateTime   @updatedAt
   profile     Profile    @relation(fields: [profileId], references: [clerkId], onDelete: Cascade)
   profileId   String
+  favorites    Favorites[]
+
+}
+
+
+model Favorites {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  profile   Profile  @relation(fields: [profileId], references: [clerkId], onDelete: Cascade)
+  profileId String
+
+  property   Property  @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+  propertyId String
 
 }
