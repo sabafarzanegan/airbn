@@ -1,44 +1,53 @@
 import { IconType } from "react-icons";
 import { MdCabin } from "react-icons/md";
 
-import { TbCaravan, TbTent, TbBuildingCottage } from "react-icons/tb";
-
-import { GiWoodCabin, GiMushroomHouse } from "react-icons/gi";
-import { PiWarehouse, PiLighthouse, PiVan } from "react-icons/pi";
-
-import { GoContainer } from "react-icons/go";
-
+import { TbBuildingCottage } from "react-icons/tb";
+import { PiBuildingApartment } from "react-icons/pi";
+import { TbBeach } from "react-icons/tb";
+import { MdOutlineVilla } from "react-icons/md";
+import { FaSwimmingPool } from "react-icons/fa";
+import { MdOutlineHolidayVillage } from "react-icons/md";
 export type Category = {
   label: CategoryName;
   icon: IconType;
 };
 
 export type CategoryName =
-  | "کلبه روستایی"
-  | "چادر"
-  | "کاروان"
-  | "اتاق"
-  | " اقامتگاه (یا کلبه کوهستانی)";
+  | "ویلا"
+  | "آپارتمان"
+  | "ساحلی"
+  | "استخردار"
+  | "اقامتگاه"
+  | "کلبه"
+  | "بوم گردی";
 
 export const Categories: Category[] = [
   {
-    label: "کلبه روستایی",
-    icon: MdCabin,
+    label: "ویلا",
+    icon: MdOutlineVilla,
   },
   {
-    label: "چادر",
-    icon: TbTent,
+    label: "آپارتمان",
+    icon: PiBuildingApartment,
   },
   {
-    label: "کاروان",
-    icon: PiVan,
+    label: "ساحلی",
+    icon: TbBeach,
   },
   {
-    label: "اتاق",
-    icon: PiWarehouse,
+    label: "استخردار",
+    icon: FaSwimmingPool,
   },
   {
     label: "اقامتگاه",
     icon: TbBuildingCottage,
+  },
+  {
+    label: "کلبه",
+    icon: MdCabin,
+  },
+  {
+    label: "بوم گردی",
+    icon: MdOutlineHolidayVillage,
   },
 ];

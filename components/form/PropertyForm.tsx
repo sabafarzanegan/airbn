@@ -54,16 +54,14 @@ function PropertyForm({ city }: { city: cityType[] }) {
     },
   });
   async function onSubmit(values: z.infer<typeof propertySchema>) {
-    console.log(values);
-
     try {
       setLoading(true);
       const path = await UploadImameInSupabase(image.file);
       const data = await createPropertyAction(values, path);
-      console.log(data);
+      console.log(data.success);
 
       if (data.success) {
-        toast({ description: data.message });
+        toast({ description: "آگهی شما با موفقیت ثبت شد" });
         setLoading(false);
       } else {
         toast({ description: data.message });

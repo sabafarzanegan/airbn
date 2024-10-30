@@ -138,23 +138,20 @@ export const getCenter = async () => {
 
 export const createPropertyAction = async (
   formData: typeof propertySchema,
-  path
+  path: string
 ) => {
   const user = await getAuthuser();
 
-  console.log(formData);
   try {
-    const data = await db.property.create({
+    const property = await db.property.create({
       data: {
         ...formData,
         profileId: user.id,
         image: path,
       },
     });
-    console.log(data);
-    return { success: true, message: "آگهی شما با موفقیت ثبت شد" };
 
-    // console.log(path);
+    return { success: true, message: "آگهی شما با موفقیت ثبت شد" };
   } catch (error) {
     return {
       success: false,
@@ -189,7 +186,6 @@ export const fetchProperties = async ({
       price: true,
     },
   });
-  console.log(properties);
 
   return properties;
 };

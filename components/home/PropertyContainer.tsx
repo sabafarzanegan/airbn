@@ -15,6 +15,7 @@ async function PropertiesContainer({
     category,
     search,
   });
+  console.log(search);
 
   if (properties.length === 0) {
     return <p>موردی وجود ندارد</p>;
