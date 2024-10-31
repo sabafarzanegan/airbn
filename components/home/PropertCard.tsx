@@ -9,10 +9,10 @@ import FavoriteTogglebtn from "./FavoriteTogglebtn";
 function PropertCard({ property }: { property: PropertPropsCard }) {
   return (
     <article className="group relative">
-      <Link href={`/properties/${property.id}`}>
+      <Link href={`/properties/${property?.id}`}>
         <div className="relative h-[300px] overflow-hidden rounded-md">
           <Image
-            src={property.image}
+            src={property?.image}
             fill
             sizes="(max-width:768px) 100vw,50vw"
             alt=""
@@ -21,19 +21,19 @@ function PropertCard({ property }: { property: PropertPropsCard }) {
         </div>
         <div className="flex items-center justify-between mt-2">
           <h3 className="text-sm font-semibold mt-1">
-            {property.name.substring(0, 60)}
+            {property?.name.substring(0, 60)}
           </h3>
-          <PropertyRating inPage={false} propertId={property.id} />
+          <PropertyRating inPage={false} propertId={property?.id} />
         </div>
-        <p className="trxt-sm mt-1">{property.tagline.substring(0, 45)}</p>
+        <p className="trxt-sm mt-1">{property?.tagline.substring(0, 45)}</p>
         <div className="flex items-center justify-between mt-1">
           <p className="text-sm mt-1 flex items-center gap-x-2">
             <span className="font-semibold">
-              {formatAsToman(property.price)}
+              {formatAsToman(property?.price)}
             </span>
-            <span>هرشب</span>
+            <span className="text-gray-500 text-sm">هرشب</span>
           </p>
-          <span>{property.country}</span>
+          <span className="text-gray-500">{property?.country}</span>
         </div>
       </Link>
       <div className="absolute top-5 right-5 z-5">

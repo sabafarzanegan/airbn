@@ -11,19 +11,18 @@ async function PropertiesContainer({
   category?: string;
   search?: string;
 }) {
-  const properties: PropertPropsCard[] = await fetchProperties({
+  const properties: PropertPropsCard[] | null = await fetchProperties({
     category,
     search,
   });
-  console.log(search);
 
-  if (properties.length === 0) {
+  if (properties?.length === 0) {
     return <p>موردی وجود ندارد</p>;
   }
 
   return (
     <main className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
-      {properties.map((property) => (
+      {properties?.map((property) => (
         <PropertCard property={property} />
       ))}
     </main>
