@@ -266,3 +266,17 @@ export const fetchFavorites = async () => {
 
   return favorites.map((favorite) => favorite.property);
 };
+
+export const fetchPropertyDetail = async (id: string) => {
+  try {
+    const detail = await db.property.findUnique({
+      where: {
+        id,
+      },
+      include: {
+        profile: true,
+      },
+    });
+    return detail;
+  } catch (error) {}
+};
