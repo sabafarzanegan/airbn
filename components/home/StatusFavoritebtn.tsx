@@ -18,19 +18,6 @@ export default function StatusFavoritebtn({
 }) {
   const { pending } = useFormStatus();
   return (
-    // <div className="flex items-center justify-center">
-    //   <Button
-    //     variant="outline"
-    //     type="submit"
-    //     size="icon"
-    //     className={`cursor-pointer p-2 ${favoriteId ? "text-red-600" : ""}`}>
-    //     {pending ? (
-    //       <ReloadIcon className="h-4 w-4 animate-spin" />
-    //     ) : (
-    //       <FaHeart />
-    //     )}
-    //   </Button>
-    // </div>
     <TooltipProvider>
       <Tooltip>
         <TooltipTrigger asChild>
@@ -50,7 +37,7 @@ export default function StatusFavoritebtn({
         </TooltipTrigger>
         <TooltipContent
           className={`${favoriteId ? "bg-red-500" : "bg-primary"}`}>
-          <p>{favoriteId ? "حدف از موردبسندها" : "اضافه به موردبسندها"}</p>
+          <p>{favoriteId ? "حدف از مورپسندها" : "اضافه به موردپسندها"}</p>
         </TooltipContent>
       </Tooltip>
     </TooltipProvider>

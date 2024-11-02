@@ -5,7 +5,7 @@ import Navbar from "@/components/navbar/Navbar";
 import { ThemeProvider } from "../components/theme-provider";
 import { ClerkProvider } from "@clerk/nextjs";
 
-const inter = Vazirmatn({ subsets: ["arabic"] });
+const inter = Vazirmatn({ subsets: ["latin-ext"] });
 
 export const metadata: Metadata = {
   title: "اجاره ویلا با جاباما در سراسر کشور",

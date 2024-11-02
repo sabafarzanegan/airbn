@@ -22,7 +22,6 @@ export function formatAsToman(price: string | number) {
 }
 
 export function convertToFarsi(number: number) {
-  // تعریف نقشه‌ای برای تبدیل اعداد انگلیسی به اعداد فارسی
   const englishToFarsi = {
     "0": "۰",
     "1": "۱",
@@ -36,7 +35,6 @@ export function convertToFarsi(number: number) {
     "9": "۹",
   };
 
-  // تبدیل عدد به رشته و جایگزینی هر رقم انگلیسی با رقم فارسی
   return number
     .toString()
     .split("")
