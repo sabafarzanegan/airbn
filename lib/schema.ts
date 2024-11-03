@@ -1,4 +1,4 @@
-import { z } from "zod";
+import { string, z } from "zod";
 export const createProfileSchema = z.object({
   username: z.string().min(4, { message: "نام کاربری حداقل باید دو حرف باشد" }),
   firstName: z.string().min(2, { message: " نام حداقل باید دو حرف باشد" }),
@@ -70,4 +70,10 @@ export const propertySchema = z.object({
     message: "باید یک مقدار مثبت باشد",
   }),
   amenities: z.string(),
+});
+
+export const reviewSchema = z.object({
+  propertyId: z.string(),
+  rating: z.coerce.number().int(),
+  comment: z.string().min(2, { message: "لطفا متن نظر خود رابنویسید" }),
 });

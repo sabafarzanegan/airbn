@@ -2,9 +2,12 @@ import Description from "@/components/home/Description";
 import FavoriteTogglebtn from "@/components/home/FavoriteTogglebtn";
 import PersianCalender from "@/components/home/PersianCalenser";
 import PropertyDetails from "@/components/home/PropertyDetails";
+import PropertyRating from "@/components/home/PropertyRating";
 import SharedBtn from "@/components/home/SharedBtn";
 import SingleBread from "@/components/home/SingleBread";
 import Userinfo from "@/components/home/Userinfo";
+import PropertyReview from "@/components/Review/PropertyReview";
+import ReviewContainer from "@/components/Review/ReviewContainer";
 import { fetchPropertyDetail } from "@/lib/actions/formAction";
 import Image from "next/image";
 import { redirect } from "next/navigation";
@@ -54,17 +57,22 @@ async function page({ params }: { params: { id: string } }) {
         />
       </div>
       {/* calender and more detail */}
-      <div className="flex items-start justify-between mt-6">
+      <div className="flex items-start justify-between mt-6 flex-wrap md:flex-nowrap gap-y-16 ">
         {/* calender */}
-        <div className="">
+        <div className="flex-1">
           <PersianCalender />
         </div>
         {/* more detail */}
-        <div className="space-y-4">
+        <div className="space-y-4 flex-1">
+          <PropertyRating propertId={detailProperty.id} inPage={true} />
           <Userinfo profile={profile} />
           <PropertyDetails detailes={detailes} />
           <Description description={detailProperty.description} />
+          <PropertyReview propertyId={detailProperty.id} />
         </div>
+      </div>
+      <div className="mt-6">
+        <ReviewContainer propertyId={detailProperty.id} />
       </div>
     </section>
   );

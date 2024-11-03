@@ -280,3 +280,117 @@ export const fetchPropertyDetail = async (id: string) => {
     return detail;
   } catch (error) {}
 };
+
+export const createReview = async (formData: {
+  propertyId: string;
+  rating: number;
+  comment: string;
+}) => {
+  console.log(formData);
+  try {
+    const user = await getAuthuser();
+    const newReview = await db.review.create({
+      data: {
+        profileId: user.id,
+        propertyId: formData.propertyId,
+        rating: formData.rating,
+        comment: formData.comment,
+      },
+    });
+    console.log(newReview);
+
+    revalidatePath(`/property/${formData.propertyId}`);
+    return { success: true, message: "نظر شما ثبت شد" };
+  } catch (error) {
+    console.log(error);
+
+    return { success: false, message: "مشکلی به وجودآمد دوباره تلاش کنید " };
+  }
+};
+
+export const fetchReviewByProperty = async (propertyId: string) => {
+  try {
+    const Allreview = await db.review.findMany({
+      where: {
+        propertyId: propertyId,
+      },
+      select: {
+        rating: true,
+        id: true,
+        comment: true,
+        profile: {
+          select: {
+            profileImage: true,
+            lastName: true,
+          },
+        },
+      },
+    });
+    return Allreview;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const fetchReviewByuser = async () => {
+  const user = await getAuthuser();
+  try {
+    const reviews = await db.review.findMany({
+      where: {
+        profileId: user.id,
+      },
+      select: {
+        id: true,
+        rating: true,
+        comment: true,
+        property: {
+          select: {
+            name: true,
+            image: true,
+          },
+        },
+      },
+    });
+
+    return reviews;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const deletReview = async (id: string) => {
+  const user = await getAuthuser();
+  try {
+    const deletedReview = await db.review.delete({
+      where: {
+        profileId: user.id,
+        id: id,
+      },
+    });
+    console.log(deletReview);
+    revalidatePath("/reviews");
+    return { success: true, message: "نظر شما حدف شد" };
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export async function fetchPropertyRating(propertyId: string) {
+  const result = await db.review.groupBy({
+    by: ["propertyId"],
+    _avg: {
+      rating: true,
+    },
+    _count: {
+      rating: true,
+    },
+    where: {
+      propertyId,
+    },
+  });
+
+  return {
+    rating: result[0]?._avg.rating?.toFixed(1) ?? 0,
+    count: result[0]?._count.rating ?? 0,
+  };
+}

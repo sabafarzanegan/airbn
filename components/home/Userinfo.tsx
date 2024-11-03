@@ -9,10 +9,10 @@ type props = {
 };
 function Userinfo({ profile }: props) {
   return (
-    <div className="flex  items-start justify-end gap-x-2">
+    <div className="flex  items-center  gap-x-2">
       <div>
-        <div>به میزیانی</div>
-        <span>{profile.lastName}</span>
+        <div className="">به میزیانی</div>
+        <span className="font-semibold text-lg">{profile.lastName}</span>
       </div>
       <div>
         <Image

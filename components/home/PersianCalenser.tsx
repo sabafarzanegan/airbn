@@ -13,7 +13,7 @@ export default function PersianCalender() {
 
   return (
     <>
-      <div className="space-y-3">
+      <div className="space-y-3 ">
         <h2 className="font-semibold flex items-center">
           <Calendar1Icon className="h-5 text-primary font-bold" />
           <span className="px-2">
