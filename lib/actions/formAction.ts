@@ -275,6 +275,12 @@ export const fetchPropertyDetail = async (id: string) => {
       },
       include: {
         profile: true,
+        bookings: {
+          select: {
+            checkIn: true,
+            checkOut: true,
+          },
+        },
       },
     });
     return detail;
@@ -376,21 +382,59 @@ export const deletReview = async (id: string) => {
 };
 
 export async function fetchPropertyRating(propertyId: string) {
-  const result = await db.review.groupBy({
-    by: ["propertyId"],
-    _avg: {
-      rating: true,
-    },
-    _count: {
-      rating: true,
-    },
-    where: {
-      propertyId,
-    },
-  });
-
-  return {
-    rating: result[0]?._avg.rating?.toFixed(1) ?? 0,
-    count: result[0]?._count.rating ?? 0,
-  };
+  try {
+    const result = await db.review.groupBy({
+      by: ["propertyId"],
+      _avg: {
+        rating: true,
+      },
+      _count: {
+        rating: true,
+      },
+      where: {
+        propertyId,
+      },
+    });
+    return {
+      rating: result[0]?._avg.rating?.toFixed(1) ?? 0,
+      count: result[0]?._count.rating ?? 0,
+    };
+  } catch (error) {
+    return null;
+  }
 }
+
+export const createBookingAction = async ({
+  propertyId,
+  checkIn,
+  checkOut,
+  orderTotal,
+  totalNights,
+}: {
+  propertyId: string;
+  checkIn: string;
+  checkOut: string;
+  orderTotal: number;
+  totalNights: number;
+}) => {
+  console.log(propertyId, checkIn, checkOut, orderTotal, totalNights);
+  try {
+    const user = await getAuthuser();
+    const newBookings = await db.booking.create({
+      data: {
+        checkIn,
+        checkOut,
+        propertyId,
+        orderTotal,
+        totalNights,
+        profileId: user.id,
+      },
+    });
+    console.log(newBookings);
+    return { success: true, message: "رزرو با موفقیت انجام شد" };
+  } catch (error) {
+    console.log(error);
+  } finally {
+    redirect("/bookings");
+  }
+};

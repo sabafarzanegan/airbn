@@ -1,3 +1,4 @@
+import BookingWraper from "@/components/booking/BookingWraper";
 import Description from "@/components/home/Description";
 import FavoriteTogglebtn from "@/components/home/FavoriteTogglebtn";
 import PersianCalender from "@/components/home/PersianCalenser";
@@ -57,10 +58,14 @@ async function page({ params }: { params: { id: string } }) {
         />
       </div>
       {/* calender and more detail */}
-      <div className="flex items-start justify-between mt-6 flex-wrap md:flex-nowrap gap-y-16 ">
+      <div className="flex items-start justify-between mt-6 flex-wrap md:flex-nowrap gap-y-16 gap-x-8 ">
         {/* calender */}
         <div className="flex-1">
-          <PersianCalender />
+          <BookingWraper
+            propertyId={detailProperty.id}
+            price={detailProperty.price}
+            bookings={detailProperty.bookings}
+          />
         </div>
         {/* more detail */}
         <div className="space-y-4 flex-1">

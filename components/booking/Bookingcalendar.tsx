@@ -7,13 +7,48 @@ import "react-multi-date-picker/styles/layouts/mobile.css";
 import InputIcon from "react-multi-date-picker/components/input_icon";
 import "react-multi-date-picker/styles/colors/teal.css";
 import { Calendar1Icon } from "lucide-react";
+import { useProperty } from "@/lib/store";
+import { calculateDateDifference } from "@/lib/utils";
 
-export default function PersianCalender() {
+export default function Bookingcalendar({
+  propertyId,
+  price,
+}: {
+  propertyId: string;
+  price: number;
+}) {
+  const { bookings, range } = useProperty((state) => state);
+
   const [date, setDate] = useState([]);
   useEffect(() => {
-    console.log(date);
-  }, [date]);
+    if (date.length === 2) {
+      useProperty.setState({
+        bookings: [{ checkIn: date[0], checkOut: date[1] }],
+      });
+      console.log(date);
+      const range = calculateDateDifference(date);
 
+      useProperty.setState({ range: range + 1 });
+      useProperty.setState({
+        price: price,
+        propertyId: propertyId,
+      });
+    }
+  }, [date, propertyId, price]);
+  useEffect(() => {
+    console.log("Updated bookings:", bookings);
+    console.log("Updated range:", range);
+  }, [bookings]);
+
+  useEffect(() => {
+    // ریست کردن وضعیت به مقادیر اولیه زمانی که `propertyId` تغییر می‌کند
+    useProperty.setState({
+      propertyId: propertyId,
+      price: price,
+      bookings: [{ checkIn: "", checkOut: "" }],
+      range: 0,
+    });
+  }, [propertyId]);
   return (
     <>
       <div className="space-y-3 ">

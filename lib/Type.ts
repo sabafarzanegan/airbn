@@ -44,3 +44,8 @@ export type PropertPropsCard = {
   country: string;
   price: number;
 };
+
+export type Booking = {
+  checkIn: string;
+  checkOut: string;
+};

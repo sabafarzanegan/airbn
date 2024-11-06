@@ -8,7 +8,7 @@ async function PropertyRating({
   propertId: string;
   inPage: boolean;
 }) {
-  const { rating, count } = await fetchPropertyRating(propertId);
+  const { count } = await fetchPropertyRating(propertId);
 
   if (count === 0) return null;
 
@@ -21,7 +21,7 @@ async function PropertyRating({
       <span>
         <FaStar className="w-3 h-3" />
       </span>
-      <span>{convertToFarsi(Number(rating))}</span>
+      <span>{convertToFarsi(Number(2))}</span>
     </span>
   );
 }

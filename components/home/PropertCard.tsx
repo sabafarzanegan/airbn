@@ -1,5 +1,5 @@
 import { PropertPropsCard } from "@/lib/Type";
-import { formatAsToman } from "@/lib/utils";
+import { convertToFarsi, formatAsToman } from "@/lib/utils";
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
@@ -23,13 +23,14 @@ function PropertCard({ property }: { property: PropertPropsCard }) {
           <h3 className="text-sm font-semibold mt-1">
             {property?.name.substring(0, 60)}
           </h3>
-          <PropertyRating inPage={false} propertId={property?.id} />
+          {/* <PropertyRating inPage={false} propertId={property?.id} /> */}
         </div>
         <p className="trxt-sm mt-1">{property?.tagline.substring(0, 45)}</p>
         <div className="flex items-center justify-between mt-1">
           <p className="text-sm mt-1 flex items-center gap-x-2">
-            <span className="font-semibold">
-              {formatAsToman(property?.price)}
+            <span className="font-semibold items-center gap-x-3">
+              {convertToFarsi(property?.price)}
+              <span>تومان</span>
             </span>
             <span className="text-gray-500 text-sm">هرشب</span>
           </p>
