@@ -35,13 +35,12 @@ export default function Bookingcalendar({
       });
     }
   }, [date, propertyId, price]);
-  useEffect(() => {
-    console.log("Updated bookings:", bookings);
-    console.log("Updated range:", range);
-  }, [bookings]);
+  // useEffect(() => {
+  //   console.log("Updated bookings:", bookings);
+  //   console.log("Updated range:", range);
+  // }, [bookings]);
 
   useEffect(() => {
-    // ریست کردن وضعیت به مقادیر اولیه زمانی که `propertyId` تغییر می‌کند
     useProperty.setState({
       propertyId: propertyId,
       price: price,

@@ -40,17 +40,21 @@ export const createProfileAction = async (formData: createProfileType) => {
 };
 
 export const fetchImageUser = async () => {
-  const user = await getAuthuser();
-  if (!user) return null;
-  const profile = await db.profile.findUnique({
-    where: {
-      clerkId: user.id,
-    },
-    select: {
-      profileImage: true,
-    },
-  });
-  return profile?.profileImage;
+  try {
+    const user = await getAuthuser();
+    if (!user) return null;
+    const profile = await db.profile.findUnique({
+      where: {
+        clerkId: user.id,
+      },
+      select: {
+        profileImage: true,
+      },
+    });
+    return profile?.profileImage;
+  } catch (error) {
+    return null;
+  }
 };
 
 export const getAuthuser = async () => {
@@ -187,7 +191,7 @@ export const fetchProperties = async ({
         price: true,
       },
     });
-
+    console.log(properties);
     return properties;
   } catch (error) {
     return null;
@@ -436,5 +440,71 @@ export const createBookingAction = async ({
     console.log(error);
   } finally {
     redirect("/bookings");
+  }
+};
+
+export const fetchBookingByPropertIdUser = async (propertyId: string) => {
+  const user = await getAuthuser();
+  try {
+    const specialBooking = await db.booking.findFirst({
+      where: {
+        propertyId: propertyId,
+        profileId: user.id,
+      },
+      select: {
+        checkIn: true,
+        checkOut: true,
+        orderTotal: true,
+        totalNights: true,
+      },
+    });
+    console.log(specialBooking);
+    return specialBooking;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const fetchUserBookings = async () => {
+  try {
+    const user = await getAuthuser();
+    const allBookings = await db.booking.findMany({
+      where: {
+        profileId: user.id,
+      },
+      include: {
+        property: {
+          select: {
+            id: true,
+            name: true,
+            country: true,
+            image: true,
+          },
+        },
+      },
+    });
+    console.log(allBookings);
+    return allBookings;
+  } catch (error) {}
+};
+
+export const deleteBookingAction = async ({
+  bookingId,
+}: {
+  bookingId: string;
+}) => {
+  try {
+    const user = await getAuthuser();
+    const deletedBooking = await db.booking.delete({
+      where: {
+        id: bookingId,
+        profileId: user.id,
+      },
+    });
+    console.log(deletedBooking);
+    revalidatePath("/bookings");
+    return { success: true, message: "رزرو شما باموفقیت لغو شد" };
+  } catch (error) {
+    console.log(error);
   }
 };

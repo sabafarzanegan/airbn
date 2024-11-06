@@ -1,7 +1,7 @@
 import BookingWraper from "@/components/booking/BookingWraper";
 import Description from "@/components/home/Description";
 import FavoriteTogglebtn from "@/components/home/FavoriteTogglebtn";
-import PersianCalender from "@/components/home/PersianCalenser";
+
 import PropertyDetails from "@/components/home/PropertyDetails";
 import PropertyRating from "@/components/home/PropertyRating";
 import SharedBtn from "@/components/home/SharedBtn";
@@ -9,12 +9,18 @@ import SingleBread from "@/components/home/SingleBread";
 import Userinfo from "@/components/home/Userinfo";
 import PropertyReview from "@/components/Review/PropertyReview";
 import ReviewContainer from "@/components/Review/ReviewContainer";
-import { fetchPropertyDetail } from "@/lib/actions/formAction";
+import {
+  fetchBookingByPropertIdUser,
+  fetchPropertyDetail,
+} from "@/lib/actions/formAction";
 import Image from "next/image";
 import { redirect } from "next/navigation";
 
 async function page({ params }: { params: { id: string } }) {
   const detailProperty = await fetchPropertyDetail(params.id);
+
+  const specialBooking = await fetchBookingByPropertIdUser(detailProperty?.id);
+  console.log(specialBooking);
 
   if (!detailProperty) redirect("/");
   const detailes = {
@@ -65,11 +71,15 @@ async function page({ params }: { params: { id: string } }) {
             propertyId={detailProperty.id}
             price={detailProperty.price}
             bookings={detailProperty.bookings}
+            checkIn={specialBooking?.checkIn}
+            checkOut={specialBooking?.checkOut}
+            orderTotal={specialBooking?.orderTotal}
+            totalNights={specialBooking?.totalNights}
           />
         </div>
         {/* more detail */}
         <div className="space-y-4 flex-1">
-          <PropertyRating propertId={detailProperty.id} inPage={true} />
+          {/* <PropertyRating propertId={detailProperty.id} inPage={true} /> */}
           <Userinfo profile={profile} />
           <PropertyDetails detailes={detailes} />
           <Description description={detailProperty.description} />
