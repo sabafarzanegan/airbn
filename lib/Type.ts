@@ -9,8 +9,10 @@ export const links: NavLinks[] = [
   { href: "/bookings ", label: "رزرو شده" },
   { href: "/reviews ", label: "نظرات" },
   { href: "/rentals/create ", label: "ساختن آگهی" },
-  { href: "/rentals", label: "اجاره شده" },
+  { href: "/reservations ", label: "آگهی های رزروشده شما" },
+  { href: "/rentals", label: "آگهی های من" },
   { href: "/profile ", label: "پروفایل" },
+  { href: "/admin ", label: "ادمین" },
 ];
 
 export type createProfileType = {

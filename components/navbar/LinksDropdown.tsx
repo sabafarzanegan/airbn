@@ -12,7 +12,10 @@ import Link from "next/link";
 import SignOutLink from "./SignOutLink";
 import { SignedOut, SignedIn, SignInButton, SignUpButton } from "@clerk/nextjs";
 import { Button } from "../ui/button";
+import { auth } from "@clerk/nextjs/server";
 function LinksDropdown() {
+  const { userId } = auth();
+  const isAdmin = userId === process.env.ADMIN_USER_ID;
   return (
     <DropdownMenu>
       <DropdownMenuTrigger className="border-none peer-aria-checked:border-none">
@@ -37,12 +40,15 @@ function LinksDropdown() {
           </DropdownMenuItem>
         </SignedOut>
         <SignedIn>
-          {links.map((link) => (
-            <DropdownMenuItem className="w-full font-semibold">
-              <DropdownMenuShortcut></DropdownMenuShortcut>
-              <Link href={link.href}>{link.label}</Link>
-            </DropdownMenuItem>
-          ))}
+          {links.map((link) => {
+            if (link.label === "ادمین" && !isAdmin) return null;
+            return (
+              <DropdownMenuItem className="w-full font-semibold">
+                <DropdownMenuShortcut></DropdownMenuShortcut>
+                <Link href={link.href}>{link.label}</Link>
+              </DropdownMenuItem>
+            );
+          })}
           <DropdownMenuItem className="w-full">
             <SignOutLink />
           </DropdownMenuItem>

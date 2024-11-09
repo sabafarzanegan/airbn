@@ -5,8 +5,7 @@ import db from "../db";
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import { propertySchema } from "@/lib/schema";
-import { UploadImameInSupabase } from "../supabase";
-import { toast } from "@/hooks/use-toast";
+import { formatDate } from "date-fns";
 
 export const createProfileAction = async (formData: createProfileType) => {
   try {
@@ -504,6 +503,176 @@ export const deleteBookingAction = async ({
     console.log(deletedBooking);
     revalidatePath("/bookings");
     return { success: true, message: "رزرو شما باموفقیت لغو شد" };
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const fetchRentals = async () => {
+  const user = await getAuthuser();
+  const rentals = await db.property.findMany({
+    where: {
+      profileId: user.id,
+    },
+    select: {
+      id: true,
+      name: true,
+      price: true,
+    },
+  });
+
+  const rentalsWithBookingSums = await Promise.all(
+    rentals.map(async (rental) => {
+      const totalNightsSum = await db.booking.aggregate({
+        where: {
+          propertyId: rental.id,
+        },
+        _sum: {
+          totalNights: true,
+        },
+      });
+
+      const orderTotalSum = await db.booking.aggregate({
+        where: {
+          propertyId: rental.id,
+        },
+        _sum: {
+          orderTotal: true,
+        },
+      });
+
+      return {
+        ...rental,
+        totalNightsSum: totalNightsSum._sum.totalNights,
+        orderTotalSum: orderTotalSum._sum.orderTotal,
+      };
+    })
+  );
+
+  return rentalsWithBookingSums;
+};
+
+export const deletRental = async ({ propertyId }: { propertyId: string }) => {
+  console.log(propertyId);
+  try {
+    const user = await getAuthuser();
+    const deletedPropery = await db.property.delete({
+      where: {
+        id: propertyId,
+        profileId: user.id,
+      },
+    });
+    revalidatePath("/rentals");
+  } catch (error) {}
+};
+
+export const fetchReservations = async () => {
+  const user = await getAuthuser();
+
+  const reservations = await db.booking.findMany({
+    where: {
+      property: {
+        profileId: user.id,
+      },
+    },
+    orderBy: {
+      createdAt: "desc",
+    },
+    include: {
+      property: {
+        select: {
+          id: true,
+          name: true,
+          price: true,
+          country: true,
+        },
+      },
+    },
+  });
+  return reservations;
+};
+
+export const getAdminUser = async () => {
+  const user = await getAuthuser();
+  if (user.id !== process.env.ADMIN_USER_ID) redirect("/");
+  return user;
+};
+
+export const fetchStats = async () => {
+  await getAdminUser();
+
+  const usersCount = await db.profile.count();
+  const propertiesCount = await db.property.count();
+  const bookingsCount = await db.booking.count({
+    where: {
+      paymentStatus: false,
+    },
+  });
+
+  return {
+    usersCount,
+    propertiesCount,
+    bookingsCount,
+  };
+};
+
+export const fetchChartsData = async () => {
+  await getAdminUser();
+  const date = new Date();
+  date.setMonth(date.getMonth() - 6);
+  const sixMonthsAgo = date;
+
+  const bookings = await db.booking.findMany({
+    where: {
+      createdAt: {
+        gte: sixMonthsAgo,
+      },
+    },
+    orderBy: {
+      createdAt: "asc",
+    },
+  });
+  const bookingsPerMonth = bookings.reduce((total, current) => {
+    const date = formatDate(current.createdAt, true);
+    const existingEntry = total.find((entry) => entry.date === date);
+    if (existingEntry) {
+      existingEntry.count += 1;
+    } else {
+      total.push({ date, count: 1 });
+    }
+    return total;
+  }, [] as Array<{ date: string; count: number }>);
+  return bookingsPerMonth;
+};
+
+export const fetchRentalDetails = async (propertyId: string) => {
+  const user = await getAuthuser();
+
+  return db.property.findUnique({
+    where: {
+      id: propertyId,
+      profileId: user.id,
+    },
+  });
+};
+
+export const updatePropertyAction = async (formatDate, id) => {
+  const user = await getAuthuser();
+  console.log(formatDate);
+  try {
+    const updatedProperty = await db.property.update({
+      where: {
+        profileId: user.id,
+        id: id,
+      },
+      data: {
+        ...formatDate,
+      },
+    });
+    console.log(updatedProperty);
+
+    revalidatePath(`/rentals/${id}/edit`);
+    return { success: true, message: "آگهی با موفقیت تغییر کرد" };
   } catch (error) {
     console.log(error);
   }

@@ -21,23 +21,23 @@ async function page() {
   }
 
   return (
-    <Table>
-      <TableHeader className="">
-        <TableRow className="flex items-center justify-between">
-          <TableHead>تصویر</TableHead>
-          <TableHead>اسم</TableHead>
-          <TableHead>شهر</TableHead>
-          <TableHead>تاریخ ورود</TableHead>
-          <TableHead>تاریخ خروج</TableHead>
-          <TableHead>شب</TableHead>
-          <TableHead>هزینه کل</TableHead>
-          <TableHead>حذف</TableHead>
+    <Table dir="rtl">
+      <TableHeader className="w-full">
+        <TableRow>
+          <TableHead className="px-0 text-right">تصویر</TableHead>
+          <TableHead className="px-0 text-right">اسم</TableHead>
+          <TableHead className="px-0 text-right">شهر</TableHead>
+          <TableHead className="px-0 text-right">تاریخ ورود</TableHead>
+          <TableHead className="px-0 text-right">تاریخ خروج</TableHead>
+          <TableHead className="px-0 text-right">شب</TableHead>
+          <TableHead className="px-0 text-right">هزینه کل</TableHead>
+          <TableHead className="px-0 text-right">حذف</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
         {bookings.map((booking) => (
-          <TableRow className="flex items-center justify-between">
-            <TableCell className="p-0">
+          <TableRow>
+            <TableCell>
               <Image
                 src={booking.property.image}
                 alt=""
@@ -46,18 +46,12 @@ async function page() {
                 className="w-12 h-12 rounded-md"
               />
             </TableCell>
-            <TableCell className="p-0">
-              {booking.property.name.substring(0, 20)}
-            </TableCell>
-            <TableCell className="p-0">{booking.property.country}</TableCell>
-            <TableCell className="p-0">{booking.checkIn}</TableCell>
-            <TableCell className="p-0">{booking.checkOut}</TableCell>
-            <TableCell className="p-0">
-              {convertToFarsi(booking.totalNights)}
-            </TableCell>
-            <TableCell className="p-0">
-              {convertToFarsi(booking.orderTotal)}
-            </TableCell>
+            <TableCell>{booking.property.name.substring(0, 20)}</TableCell>
+            <TableCell>{booking.property.country}</TableCell>
+            <TableCell>{booking.checkIn}</TableCell>
+            <TableCell>{booking.checkOut}</TableCell>
+            <TableCell>{convertToFarsi(booking.totalNights)}</TableCell>
+            <TableCell>{convertToFarsi(booking.orderTotal)}</TableCell>
             <TableCell>
               <DeleteBooking bookingId={booking.id} />
             </TableCell>
