@@ -677,3 +677,22 @@ export const updatePropertyAction = async (formatDate, id) => {
     console.log(error);
   }
 };
+
+export const uploadImage = async (data: string, id: string) => {
+  const user = await getAuthuser();
+  try {
+    await db.property.update({
+      where: {
+        id: id,
+        profileId: user.id,
+      },
+      data: {
+        image: data,
+      },
+    });
+    revalidatePath(`/rentals/${id}/edit`);
+    return { success: true, message: "تصویر شما با موفقیت تغییر کرد" };
+  } catch (error) {
+    console.log(error);
+  }
+};

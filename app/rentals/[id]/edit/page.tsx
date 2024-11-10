@@ -1,4 +1,5 @@
 import Editform from "@/components/rentals/Editform";
+import ImageContainer from "@/components/rentals/ImageContainer";
 import { fetchRentalDetails, getCenter } from "@/lib/actions/formAction";
 import React from "react";
 
@@ -24,6 +25,7 @@ async function page({ params }: { params: { id: string } }) {
   return (
     <div>
       <h1>صفحه تغییر اطلاعات</h1>
+      <ImageContainer image={property?.image} propertyId={property?.id} />
       <Editform city={city} property={detailPropert} id={property?.id} />
     </div>
   );
