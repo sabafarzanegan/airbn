@@ -12,7 +12,9 @@ import ReviewContainer from "@/components/Review/ReviewContainer";
 import {
   fetchBookingByPropertIdUser,
   fetchPropertyDetail,
+  findExistingReview,
 } from "@/lib/actions/formAction";
+import { auth } from "@clerk/nextjs/server";
 import Image from "next/image";
 import { redirect } from "next/navigation";
 
@@ -20,7 +22,12 @@ async function page({ params }: { params: { id: string } }) {
   const detailProperty = await fetchPropertyDetail(params.id);
 
   const specialBooking = await fetchBookingByPropertIdUser(detailProperty?.id);
-  console.log(specialBooking);
+  const { userId } = auth();
+  const isNotOwner = detailProperty?.profile.clerkId !== userId;
+  const reviewDoesNotExist =
+    userId &&
+    isNotOwner &&
+    !(await findExistingReview(userId, detailProperty?.id));
 
   if (!detailProperty) redirect("/");
   const detailes = {
@@ -79,11 +86,13 @@ async function page({ params }: { params: { id: string } }) {
         </div>
         {/* more detail */}
         <div className="space-y-4 flex-1">
-          {/* <PropertyRating propertId={detailProperty.id} inPage={true} /> */}
+          <PropertyRating propertId={detailProperty.id} inPage={true} />
           <Userinfo profile={profile} />
           <PropertyDetails detailes={detailes} />
           <Description description={detailProperty.description} />
-          <PropertyReview propertyId={detailProperty.id} />
+          {reviewDoesNotExist && (
+            <PropertyReview propertyId={detailProperty.id} />
+          )}
         </div>
       </div>
       <div className="mt-6">

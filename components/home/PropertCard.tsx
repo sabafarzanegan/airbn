@@ -23,7 +23,7 @@ function PropertCard({ property }: { property: PropertPropsCard }) {
           <h3 className="text-sm font-semibold mt-1">
             {property?.name.substring(0, 60)}
           </h3>
-          {/* <PropertyRating inPage={false} propertId={property?.id} /> */}
+          <PropertyRating inPage={false} propertId={property?.id} />
         </div>
         <p className="trxt-sm mt-1">{property?.tagline.substring(0, 45)}</p>
         <div className="flex items-center justify-between mt-1">

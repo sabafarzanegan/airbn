@@ -11,6 +11,7 @@ import { fetchUserBookings } from "@/lib/actions/formAction";
 import { convertToFarsi } from "@/lib/utils";
 
 import Image from "next/image";
+import Link from "next/link";
 
 async function page() {
   const bookings = await fetchUserBookings();
@@ -38,13 +39,15 @@ async function page() {
         {bookings.map((booking) => (
           <TableRow>
             <TableCell>
-              <Image
-                src={booking.property.image}
-                alt=""
-                width={100}
-                height={100}
-                className="w-12 h-12 rounded-md"
-              />
+              <Link href={`/properties/${booking.propertyId}`}>
+                <Image
+                  src={booking.property.image}
+                  alt=""
+                  width={100}
+                  height={100}
+                  className="w-12 h-12 rounded-md"
+                />
+              </Link>
             </TableCell>
             <TableCell>{booking.property.name.substring(0, 20)}</TableCell>
             <TableCell>{booking.property.country}</TableCell>

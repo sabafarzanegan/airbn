@@ -8,8 +8,6 @@ function page({
 }: {
   searchParams: { category?: string; search?: string };
 }) {
-  console.log(searchParams.search);
-
   return (
     <section>
       <CategoriesList

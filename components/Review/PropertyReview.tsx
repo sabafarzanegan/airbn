@@ -1,7 +1,7 @@
 "use client";
 import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
-import { Label } from "../ui/label";
+
 import {
   Select,
   SelectContent,
@@ -25,6 +25,9 @@ import {
 } from "../ui/form";
 import { reviewSchema } from "@/lib/schema";
 import { createReview } from "@/lib/actions/formAction";
+import { Loader2 } from "lucide-react";
+
+import { toast } from "@/hooks/use-toast";
 
 function PropertyReview({ propertyId }: { propertyId: string }) {
   const [isShowReview, setIsShowReview] = useState(false);
@@ -41,9 +44,16 @@ function PropertyReview({ propertyId }: { propertyId: string }) {
     },
   });
 
-  function onSubmit(values: z.infer<typeof reviewSchema>) {
+  async function onSubmit(values: z.infer<typeof reviewSchema>) {
     console.log(values);
-    createReview(values);
+    const data = await createReview(values);
+    if (data.success) {
+      toast({
+        description: data.message,
+      });
+      setIsShowReview(false);
+      form.setValue("comment", "");
+    }
   }
 
   return (
@@ -108,7 +118,13 @@ function PropertyReview({ propertyId }: { propertyId: string }) {
                   )}
                 />
 
-                <Button type="submit">ارسال</Button>
+                <Button type="submit" disabled={form.formState.isSubmitting}>
+                  {form.formState.isSubmitting ? (
+                    <Loader2 className="animate-spin" />
+                  ) : (
+                    "ارسال"
+                  )}
+                </Button>
               </form>
             </Form>
           </CardContent>

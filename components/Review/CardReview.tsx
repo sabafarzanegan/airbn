@@ -18,7 +18,7 @@ function CardReview({ review }: ReviewType) {
   return (
     <Card>
       <CardHeader>
-        <div className="flex items-center gap-x-2">
+        <div className="flex items-center gap-x-2 flex-wrap gap-y-1">
           <Image
             src={review.profile.profileImage}
             width={40}

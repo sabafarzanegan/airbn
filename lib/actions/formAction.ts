@@ -189,6 +189,9 @@ export const fetchProperties = async ({
         image: true,
         price: true,
       },
+      orderBy: {
+        createdAt: "desc",
+      },
     });
     console.log(properties);
     return properties;
@@ -695,4 +698,16 @@ export const uploadImage = async (data: string, id: string) => {
   } catch (error) {
     console.log(error);
   }
+};
+
+export const findExistingReview = async (
+  userId: string,
+  propertyId: string
+) => {
+  return db.review.findFirst({
+    where: {
+      profileId: userId,
+      propertyId: propertyId,
+    },
+  });
 };
