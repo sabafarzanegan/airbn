@@ -51,3 +51,17 @@ export type Booking = {
   checkIn: string;
   checkOut: string;
 };
+
+export type propertyType = {
+  name: string;
+  tagline: string;
+  price: number;
+  category: string;
+  description: string;
+  country: string;
+  guests: number;
+  bedrooms: string;
+  beds: number;
+  baths: number;
+  amenities: string;
+};

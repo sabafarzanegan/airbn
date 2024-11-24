@@ -1,6 +1,7 @@
 import CategoriesList from "@/components/home/CategoryList";
 import LoadingCard from "@/components/home/LoadingCard";
 import PropertiesContainer from "@/components/home/PropertyContainer";
+import NavSearch from "@/components/navbar/NavSearch";
 import { Suspense } from "react";
 
 function page({
@@ -10,6 +11,7 @@ function page({
 }) {
   return (
     <section>
+      <NavSearch />
       <CategoriesList
         category={searchParams?.category}
         search={searchParams?.search}

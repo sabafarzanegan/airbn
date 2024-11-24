@@ -236,17 +236,18 @@ export const toggleFavoriteAction = async (prevState: {
         },
       });
     } else {
-      await db.favorites.create({
+      const newFavorit = await db.favorites.create({
         data: {
           propertyId,
           profileId: user.id,
         },
       });
+      console.log(newFavorit);
     }
-    revalidatePath("/");
-    return { message: favoriteId ? "Removed from Faves" : "Added to Faves" };
   } catch (error) {
     return null;
+  } finally {
+    revalidatePath("/");
   }
 };
 

@@ -8,7 +8,7 @@ async function page() {
   }
 
   return (
-    <main>
+    <main className="space-y-4">
       <h1 className="text-xl font-semibold tracking-wide text-gray-600">
         مورد پسندهای شما
       </h1>

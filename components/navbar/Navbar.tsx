@@ -7,9 +7,11 @@ async function Navbar() {
   return (
     <nav className="flex items-center justify-between py-8 border-b mb-6">
       <Logo />
-      <NavSearch />
-      <DarkMode />
-      <LinksDropdown />
+
+      <div className="flex items-center">
+        <DarkMode />
+        <LinksDropdown />
+      </div>
     </nav>
   );
 }

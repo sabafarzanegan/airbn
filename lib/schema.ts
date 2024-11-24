@@ -19,14 +19,6 @@ export const ImageValidationFile = z.object({
 });
 
 export const propertySchema = z.object({
-  // image: z.object({
-  //   name: z.string(),
-  //   lastModified: z.number(),
-  //   lastModifiedDate: z.string(),
-  //   webkitRelativePath: z.string(),
-  //   size: z.number(),
-  //   type: z.string(),
-  // }),
   name: z
     .string()
     .min(2, {
@@ -46,7 +38,7 @@ export const propertySchema = z.object({
   price: z.coerce.number().int().min(0, {
     message: "باید یک مقدار مثبت باشد",
   }),
-  category: z.string(),
+  category: z.string().min(1, { message: "لطفا یک مورد را انخاب کنید" }),
   description: z.string().refine(
     (description) => {
       const wordCount = description.split(" ").length;
@@ -56,7 +48,7 @@ export const propertySchema = z.object({
       message: "محتوا باید بین 10 تا 1000حرف باشد",
     }
   ),
-  country: z.string(),
+  country: z.string().min(1, { message: "لطفا یک مورد را انخاب کنید" }),
   guests: z.coerce.number().int().min(0, {
     message: "تعداد مهمان باید یک عدد مثبت باشد",
   }),

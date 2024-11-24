@@ -21,7 +21,7 @@ function PropertCard({ property }: { property: PropertPropsCard }) {
         </div>
         <div className="flex items-center justify-between mt-2">
           <h3 className="text-sm font-semibold mt-1">
-            {property?.name.substring(0, 60)}
+            {property?.name.substring(0, 60)}...
           </h3>
           <PropertyRating inPage={false} propertId={property?.id} />
         </div>

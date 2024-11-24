@@ -36,7 +36,7 @@ function PropertyForm({ city }: { city: cityType[] }) {
       type: "",
     },
   });
-  const [loading, setLoading] = useState(false);
+
   const form = useForm<z.infer<typeof propertySchema>>({
     resolver: zodResolver(propertySchema),
     defaultValues: {
@@ -55,20 +55,24 @@ function PropertyForm({ city }: { city: cityType[] }) {
   });
   async function onSubmit(values: z.infer<typeof propertySchema>) {
     try {
-      setLoading(true);
+      if (!image.file.name) {
+        toast({
+          description: "حتما عکسی انتخاب کنید",
+        });
+        return;
+      }
       const path = await UploadImameInSupabase(image.file);
+
       const data = await createPropertyAction(values, path);
       console.log(data.success);
 
       if (data.success) {
         toast({ description: "آگهی شما با موفقیت ثبت شد" });
-        setLoading(false);
       } else {
         toast({ description: data.message });
-        setLoading(false);
       }
     } catch (error) {
-      setLoading(false);
+      console.log(error);
     }
   }
 
@@ -205,8 +209,20 @@ function PropertyForm({ city }: { city: cityType[] }) {
             </FormItem>
           )}
         />
+        <FormField
+          control={form.control}
+          name="amenities"
+          render={({ field }) => (
+            <FormItem className="mt-6 hidden">
+              <FormControl>
+                <Input {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
         <div className="flex flex-col gap-y-6">
-          <Label className="" htmlFor="image">
+          <Label className="font-bold text-xl" htmlFor="image">
             تصویر خود را وارد کنید
           </Label>
           <Input
@@ -221,8 +237,11 @@ function PropertyForm({ city }: { city: cityType[] }) {
           />
         </div>
 
-        <Button disabled={loading} className="w-full" type="submit">
-          {loading ? "...در حال ارسال" : "ارسال"}
+        <Button
+          disabled={form.formState.isSubmitting}
+          className="w-full"
+          type="submit">
+          {form.formState.isSubmitting ? "...در حال ارسال" : "ارسال"}
         </Button>
       </form>
     </Form>
