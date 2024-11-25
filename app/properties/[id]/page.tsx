@@ -73,17 +73,20 @@ async function page({ params }: { params: { id: string } }) {
       {/* calender and more detail */}
       <div className="flex items-start justify-between mt-6 flex-wrap md:flex-nowrap gap-y-16 gap-x-8 ">
         {/* calender */}
-        <div className="flex-1">
-          <BookingWraper
-            propertyId={detailProperty.id}
-            price={detailProperty.price}
-            bookings={detailProperty.bookings}
-            checkIn={specialBooking?.checkIn}
-            checkOut={specialBooking?.checkOut}
-            orderTotal={specialBooking?.orderTotal}
-            totalNights={specialBooking?.totalNights}
-          />
-        </div>
+        {isNotOwner && (
+          <div className="flex-1">
+            <BookingWraper
+              propertyId={detailProperty.id}
+              price={detailProperty.price}
+              bookings={detailProperty.bookings}
+              checkIn={specialBooking?.checkIn}
+              checkOut={specialBooking?.checkOut}
+              orderTotal={specialBooking?.orderTotal}
+              totalNights={specialBooking?.totalNights}
+            />
+          </div>
+        )}
+
         {/* more detail */}
         <div className="space-y-4 flex-1">
           <PropertyRating propertId={detailProperty.id} inPage={true} />

@@ -3,6 +3,7 @@ import { CircleUserRound } from "lucide-react";
 
 async function UserIcon() {
   const profileImage = await fetchImageUser();
+
   if (profileImage) {
     return (
       <img

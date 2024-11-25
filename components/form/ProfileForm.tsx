@@ -36,9 +36,8 @@ function ProfileForm({ firstName, lastName, username }: ProfileProps) {
     },
   });
   async function onSubmit(values: z.infer<typeof createProfileSchema>) {
-    // console.log(values);
-
     const result = await updateProfileAction(values);
+
     if (result.success) {
       toast({ description: result.message });
     } else {

@@ -6,7 +6,7 @@ import React from "react";
 async function page({ params }: { params: { id: string } }) {
   const property = await fetchRentalDetails(params.id);
   const city = await getCenter();
-  console.log(property);
+
   const detailPropert = {
     name: property?.name,
     tagline: property?.tagline,
@@ -24,7 +24,7 @@ async function page({ params }: { params: { id: string } }) {
 
   return (
     <div>
-      <h1>صفحه تغییر اطلاعات</h1>
+      <h1 className="text-lg font-semibold mb-2">صفحه تغییر اطلاعات</h1>
       <ImageContainer image={property?.image} propertyId={property?.id} />
       <Editform city={city} property={detailPropert} id={property?.id} />
     </div>

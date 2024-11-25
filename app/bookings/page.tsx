@@ -15,10 +15,13 @@ import Link from "next/link";
 
 async function page() {
   const bookings = await fetchUserBookings();
-  console.log(bookings);
 
   if (!bookings?.length) {
-    return <h1> موردی وجود ندارد</h1>;
+    return (
+      <h1 className="text-center font-semibold text-xl ">
+        شما مکانی را رزرو نکردید.
+      </h1>
+    );
   }
 
   return (
@@ -54,7 +57,10 @@ async function page() {
             <TableCell>{booking.checkIn}</TableCell>
             <TableCell>{booking.checkOut}</TableCell>
             <TableCell>{convertToFarsi(booking.totalNights)}</TableCell>
-            <TableCell>{convertToFarsi(booking.orderTotal)}</TableCell>
+            <TableCell>
+              {convertToFarsi(booking.orderTotal)}
+              <span className="px-1">تومان</span>
+            </TableCell>
             <TableCell>
               <DeleteBooking bookingId={booking.id} />
             </TableCell>

@@ -13,48 +13,48 @@ import SignOutLink from "./SignOutLink";
 import { SignedOut, SignedIn, SignInButton, SignUpButton } from "@clerk/nextjs";
 import { Button } from "../ui/button";
 import { auth } from "@clerk/nextjs/server";
+import { Sheet, SheetClose, SheetContent, SheetTrigger } from "../ui/sheet";
 function LinksDropdown() {
   const { userId } = auth();
   const isAdmin = userId === process.env.ADMIN_USER_ID;
   return (
-    <DropdownMenu>
-      <DropdownMenuTrigger className="border-none peer-aria-checked:border-none">
+    <Sheet>
+      <SheetTrigger>
         <UserIcon />
-      </DropdownMenuTrigger>
-      <DropdownMenuContent className="flex flex-col items-end justify-start gap-y-2 w-[200px] mt-2">
-        <SignedOut>
-          <DropdownMenuItem className="w-full flex items-center justify-center">
+      </SheetTrigger>
+      <SheetContent className="flex flex-col">
+        <div className="py-6 space-y-3">
+          <SignedOut>
             <SignInButton mode="modal">
-              <Button className="w-full" variant="secondary">
+              <Button className="w-full " variant="secondary">
                 ورود
               </Button>
             </SignInButton>
-          </DropdownMenuItem>
 
-          <DropdownMenuItem className="w-full flex items-center justify-center">
             <SignUpButton mode="modal">
               <Button className="w-full" variant="default">
                 ثبت نام
               </Button>
             </SignUpButton>
-          </DropdownMenuItem>
-        </SignedOut>
-        <SignedIn>
-          {links.map((link) => {
-            if (link.label === "ادمین" && !isAdmin) return null;
-            return (
-              <DropdownMenuItem className="w-full font-semibold">
-                <DropdownMenuShortcut></DropdownMenuShortcut>
-                <Link href={link.href}>{link.label}</Link>
-              </DropdownMenuItem>
-            );
-          })}
-          <DropdownMenuItem className="w-full">
+          </SignedOut>
+
+          <SignedIn>
+            <div className="flex flex-col gap-y-3">
+              {links.map((link) => {
+                if (link.label === "ادمین" && !isAdmin) return null;
+                return (
+                  <Link className="w-full font-semibold" href={link.href}>
+                    <SheetClose>{link.label}</SheetClose>
+                  </Link>
+                );
+              })}
+            </div>
+
             <SignOutLink />
-          </DropdownMenuItem>
-        </SignedIn>
-      </DropdownMenuContent>
-    </DropdownMenu>
+          </SignedIn>
+        </div>
+      </SheetContent>
+    </Sheet>
   );
 }
 

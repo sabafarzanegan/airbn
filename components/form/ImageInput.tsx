@@ -6,6 +6,7 @@ import { uploadImageaction } from "@/lib/actions/formAction";
 import { Label } from "../ui/label";
 import { UploadImameInSupabase } from "@/lib/supabase";
 import { toast } from "@/hooks/use-toast";
+import { CloudUpload } from "lucide-react";
 
 function ImageInput({
   profilePicture,
@@ -22,15 +23,10 @@ function ImageInput({
       size: 0,
       type: "",
     },
-    name: "",
-    lastModified: 0,
-    size: 0,
-    type: "",
   });
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files[0];
-    console.log(file);
 
     if (file) {
       setImage({
@@ -49,25 +45,33 @@ function ImageInput({
     }
   };
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
     try {
       setIsloading(true);
       const path = await UploadImameInSupabase(image.file);
 
       const data = await uploadImageaction(path);
-      console.log(data);
 
       if (data?.success) {
         toast({
           description: data.message,
         });
         setIsloading(false);
+
+        window.location.reload();
+      } else {
+        setIsloading(false);
+
+        toast({
+          description: "خطا در بارگزاری عکس",
+        });
       }
     } catch (error) {
       setIsloading(false);
     }
   };
   return (
-    <div className="space-y-4">
+    <div className="space-y-4 mb-3">
       {profilePicture !== undefined && (
         <Image
           src={profilePicture}
@@ -89,11 +93,31 @@ function ImageInput({
           id="profilepicture"
           name="profilepicture"
           ref={InputFileRef}
-          className=""
+          className="hidden"
         />
-
+        <div>
+          {!image.file.name ? (
+            <div
+              onClick={handleButtonClick}
+              className="my-2 cursor-pointer flex  flex-col items-center justify-center gap-y-2 p-4 border border-dashed">
+              <CloudUpload />
+              <p className="text-sm text-gray-500">
+                تصویر موردنظر را انتخاب کنید
+              </p>
+            </div>
+          ) : (
+            <div
+              onClick={handleButtonClick}
+              className="my-2 cursor-pointer flex  flex-col items-center justify-center gap-y-2 p-4 border border-dashed">
+              <p className=" text-gray-500 text-primary text-lg">
+                تصویر انتخاب شده:
+              </p>
+              <span className="text-sm">{image.file.name}</span>
+            </div>
+          )}
+        </div>
         <Button disabled={isLoading} type="submit">
-          {isLoading ? "درحال ارسال" : "ارسال"}
+          {isLoading ? "درحال ارسال" : "ذخیره عکس"}
         </Button>
       </form>
     </div>

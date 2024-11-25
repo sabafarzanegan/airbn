@@ -13,11 +13,14 @@ async function ReviewContainer({ propertyId }: { propertyId: string }) {
   }
 
   return (
-    <div>
-      {AllReviews.map((review) => (
-        <CardReview review={review} />
-      ))}
-    </div>
+    <>
+      <h3 className="mb-2 text-lg">نظرات</h3>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+        {AllReviews.map((review) => (
+          <CardReview review={review} />
+        ))}
+      </div>
+    </>
   );
 }
 

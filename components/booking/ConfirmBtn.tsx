@@ -9,7 +9,6 @@ import SubmitBookingbtn from "./SubmitBookingbtn";
 function ConfirbookingmBtn() {
   const { userId } = useAuth();
   const { propertyId, range, bookings, price } = useProperty((state) => state);
-  console.log(propertyId, range, bookings, price);
 
   if (!userId) {
     <SignInButton mode="modal">

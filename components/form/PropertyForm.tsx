@@ -20,10 +20,11 @@ import SelectedContry from "./SelectedContries";
 import ConterInput from "./ConterInput";
 import { Button } from "../ui/button";
 import { createPropertyAction } from "@/lib/actions/formAction";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { UploadImameInSupabase } from "@/lib/supabase";
 import { toast } from "@/hooks/use-toast";
 import { Label } from "../ui/label";
+import { UploadCloudIcon } from "lucide-react";
 
 function PropertyForm({ city }: { city: cityType[] }) {
   const [image, setImage] = useState({
@@ -36,6 +37,8 @@ function PropertyForm({ city }: { city: cityType[] }) {
       type: "",
     },
   });
+
+  const inputRef = useRef<HTMLInputElement>(null);
 
   const form = useForm<z.infer<typeof propertySchema>>({
     resolver: zodResolver(propertySchema),
@@ -222,7 +225,7 @@ function PropertyForm({ city }: { city: cityType[] }) {
           )}
         />
         <div className="flex flex-col gap-y-6">
-          <Label className="font-bold text-xl" htmlFor="image">
+          <Label className="font-bold text-lg" htmlFor="image">
             تصویر خود را وارد کنید
           </Label>
           <Input
@@ -234,7 +237,28 @@ function PropertyForm({ city }: { city: cityType[] }) {
               setImage({ file });
             }}
             type="file"
+            className="hidden"
+            ref={inputRef}
           />
+          {!image.file.name ? (
+            <div
+              onClick={() => {
+                inputRef.current?.click();
+              }}
+              className="cursor-pointer flex items-center gap-y-2 justify-center flex-col p-4 border border-dashed">
+              <UploadCloudIcon />
+              <p className="text-sm">عکس مورد نظر را انتخاب کنید</p>
+            </div>
+          ) : (
+            <div
+              onClick={() => {
+                inputRef.current?.click();
+              }}
+              className="cursor-pointer flex items-center gap-y-2 justify-center flex-col p-4 border border-dashed">
+              <p className="text-sm text-primary">عکس انتخاب شده:</p>
+              <span>{image.file?.name}</span>
+            </div>
+          )}
         </div>
 
         <Button

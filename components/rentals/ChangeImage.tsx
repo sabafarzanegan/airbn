@@ -30,17 +30,14 @@ function ChangeImage({ id }: { id: string }) {
         file: file,
       });
     }
-    console.log(image.file);
   };
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
       setLoading(true);
       const path = await UploadImameInSupabase(image.file);
-      console.log(path);
 
       const data = await uploadImage(path, id);
-      console.log(data);
 
       if (data?.success) {
         toast({
@@ -68,7 +65,7 @@ function ChangeImage({ id }: { id: string }) {
       {image.file.name ? (
         <form onSubmit={handleSubmit}>
           <Button disabled={loading} type="submit">
-            {loading ? <Loader2 className="animate-spin" /> : "تغییر"}
+            {loading ? <Loader2 className="animate-spin" /> : "ذخیره عکس جدید"}
           </Button>
         </form>
       ) : (

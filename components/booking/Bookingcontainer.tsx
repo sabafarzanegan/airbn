@@ -18,7 +18,7 @@ function Bookingcontainer() {
             <span>زمان اقامت</span>
             <span className="flex items-center gap-x-2">
               {convertToFarsi(range)}
-              <span>تومان</span>
+              <span>شب</span>
             </span>
           </p>
           <p className="flex items-center justify-between">

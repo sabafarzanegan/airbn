@@ -3,14 +3,14 @@ import { NextResponse } from "next/server";
 const isPublicRoute = createRouteMatcher(["/", "/properties(.*)"]);
 const isAdminRoute = createRouteMatcher(["/admin(.*)"]);
 
-const isProtectedRoute = createRouteMatcher([
-  "/bookings(.*)",
-  "/checkout(.*)",
-  "/favorites(.*)",
-  "/profile(.*)",
-  "/rentals(.*)",
-  "/reviews(.*)",
-]);
+// const isProtectedRoute = createRouteMatcher([
+//   "/bookings(.*)",
+//   "/checkout(.*)",
+//   "/favorites(.*)",
+//   "/profile(.*)",
+//   "/rentals(.*)",
+//   "/reviews(.*)",
+// ]);
 export default clerkMiddleware((auth, req) => {
   console.log("admin user", auth().userId);
   const isAdminUser = auth().userId === process.env.ADMIN_USER_ID;

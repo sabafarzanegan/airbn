@@ -11,7 +11,7 @@ function ImageContainer({
 }) {
   return (
     <>
-      <div className="flex items-center justify-center mb-20 gap-x-4 flex-wrap">
+      <div className="flex items-center justify-center flex-col gap-y-2 mb-20 gap-x-4 flex-wrap">
         {/*image */}
         <div>
           <Image
@@ -19,7 +19,7 @@ function ImageContainer({
             alt=""
             width={400}
             height={400}
-            className="w-64 h-64 rounded-md"
+            className="w-full rounded-md"
           />
         </div>
         {/* changeImage */}

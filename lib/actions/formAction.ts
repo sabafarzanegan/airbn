@@ -10,24 +10,26 @@ import { formatDate } from "date-fns";
 export const createProfileAction = async (formData: createProfileType) => {
   try {
     const user = await currentUser();
-    console.log(user);
-    if (!user) throw new Error("لطفا ابتدا وارد شوید");
 
-    await db.profile.create({
-      data: {
-        clerkId: user.id,
-        email: user.emailAddresses[0].emailAddress,
-        profileImage: user.imageUrl,
-        firstName: formData.firstName,
-        lastName: formData.lastName,
-        username: formData.username,
-      },
-    });
+    const existingUser = await checkUserInDb();
+    if (existingUser === user?.emailAddresses[0].emailAddress) {
+      return;
+    } else {
+      const newUser = await db.profile.create({
+        data: {
+          clerkId: user?.id,
+          email: user?.emailAddresses[0].emailAddress,
+          profileImage: user?.imageUrl,
+          firstName: formData.firstName,
+          lastName: formData.lastName,
+          username: formData.username,
+        },
+      });
 
-    console.log(formData);
-    await clerkClient.users.updateUserMetadata(user.id, {
-      privateMetadata: { hasProfile: true },
-    });
+      await clerkClient.users.updateUserMetadata(user?.id, {
+        privateMetadata: { hasProfile: true },
+      });
+    }
 
     return { success: true, message: "حساب کاربری با موفقیت ساخته شد" };
   } catch (error) {
@@ -35,6 +37,25 @@ export const createProfileAction = async (formData: createProfileType) => {
       success: false,
       message: error instanceof Error ? error.message : "مشکلی به وجود آمد",
     };
+  } finally {
+    redirect("/");
+  }
+};
+
+export const checkUserInDb = async () => {
+  const user = await currentUser();
+
+  if (user) {
+    const founduser = await db.profile.findFirst({
+      where: {
+        email: user.emailAddresses[0].emailAddress,
+      },
+      select: {
+        email: true,
+      },
+    });
+
+    return founduser;
   }
 };
 
@@ -67,6 +88,7 @@ export const getAuthuser = async () => {
 
 export const updateProfileAction = async (formData: createProfileType) => {
   const user = await getAuthuser();
+  console.log(formData);
 
   try {
     await db.profile.update({
@@ -79,7 +101,9 @@ export const updateProfileAction = async (formData: createProfileType) => {
         firstName: formData.firstName,
       },
     });
-    revalidatePath("/profile");
+    revalidatePath(
+      `/profile?firstName=${formData.firstName}&lastName=${formData.lastName}&username=${formData.username}`
+    );
     return { success: true, message: "حساب کاربری با موفقیت تغییر کرد" };
   } catch (error) {
     return {
@@ -112,6 +136,8 @@ export const fetchUser = async () => {
 };
 
 export const uploadImageaction = async (data: string) => {
+  console.log(data);
+
   const user = await getAuthuser();
   try {
     await db.profile.update({
@@ -522,6 +548,7 @@ export const fetchRentals = async () => {
       id: true,
       name: true,
       price: true,
+      image: true,
     },
   });
 
@@ -588,9 +615,11 @@ export const fetchReservations = async () => {
           id: true,
           name: true,
           price: true,
+          image: true,
           country: true,
         },
       },
+      profile: true,
     },
   });
   return reservations;
