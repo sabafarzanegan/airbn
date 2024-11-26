@@ -1,7 +1,6 @@
 import BookingWraper from "@/components/booking/BookingWraper";
 import Description from "@/components/home/Description";
 import FavoriteTogglebtn from "@/components/home/FavoriteTogglebtn";
-
 import PropertyDetails from "@/components/home/PropertyDetails";
 import PropertyRating from "@/components/home/PropertyRating";
 import SharedBtn from "@/components/home/SharedBtn";

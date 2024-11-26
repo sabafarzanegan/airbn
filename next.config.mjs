@@ -3,10 +3,7 @@ const nextConfig = {
   typescript: {
     ignoreBuildErrors: true,
   },
-  reactStrictMode: true,
-  experimental: {
-    serverComponents: true,
-  },
+
   images: {
     remotePatterns: [
       {
