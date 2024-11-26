@@ -465,6 +465,7 @@ export const createBookingAction = async ({
       },
     });
     console.log(newBookings);
+    revalidatePath(`/properties/${propertyId}`);
     return { success: true, message: "رزرو با موفقیت انجام شد" };
   } catch (error) {
     console.log(error);
