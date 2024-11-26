@@ -25,6 +25,7 @@ export const createProfileAction = async (formData: createProfileType) => {
           username: formData.username,
         },
       });
+      console.log(newUser);
 
       await clerkClient.users.updateUserMetadata(user?.id, {
         privateMetadata: { hasProfile: true },

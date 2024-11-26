@@ -1,12 +1,5 @@
 import { links } from "@/lib/Type";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-  DropdownMenuShortcut,
-  DropdownMenuSeparator,
-} from "../ui/dropdown-menu";
+
 import UserIcon from "./UserIcon";
 import Link from "next/link";
 import SignOutLink from "./SignOutLink";
