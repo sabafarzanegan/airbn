@@ -65,3 +65,35 @@ export type propertyType = {
   baths: number;
   amenities: string;
 };
+
+export type DetailProperty = {
+  id: string;
+  name: string;
+  tagline: string;
+  category: string;
+  image: string;
+  country: string;
+  description: string;
+
+  price: number;
+  guests: number;
+  bedrooms: number;
+  beds: number;
+  baths: number;
+  amenities: string;
+  createdAt: Date;
+  updatedAt: Date;
+  profileId: string;
+  profile: {
+    id: string;
+    clerkId: string;
+    firstName: string;
+    lastName: string;
+    username: string;
+    email: string;
+    profileImage: string;
+    createdAt: Date;
+    updatedAt: Date;
+  };
+  bookings: [{ checkIn: string; checkOut: string }];
+};

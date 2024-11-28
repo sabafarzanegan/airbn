@@ -13,6 +13,7 @@ import {
   fetchPropertyDetail,
   findExistingReview,
 } from "@/lib/actions/formAction";
+import { DetailProperty } from "@/lib/Type";
 import { auth } from "@clerk/nextjs/server";
 import Image from "next/image";
 import { redirect } from "next/navigation";
@@ -20,9 +21,16 @@ import { redirect } from "next/navigation";
 async function page({ params }: { params: { id: string } }) {
   const detailProperty = await fetchPropertyDetail(params.id);
 
-  const specialBooking = await fetchBookingByPropertIdUser(detailProperty?.id);
+  if (detailProperty) {
+    const specialBooking = await fetchBookingByPropertIdUser(
+      detailProperty?.id
+    );
+    return specialBooking;
+  }
   const { userId } = auth();
+
   const isNotOwner = detailProperty?.profile.clerkId !== userId;
+
   const reviewDoesNotExist =
     userId &&
     isNotOwner &&
