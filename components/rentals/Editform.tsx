@@ -15,7 +15,7 @@ import { propertySchema } from "@/lib/schema";
 import { Input } from "../ui/input";
 import SelectCategory from "../form/SelectCategory";
 import { Textarea } from "../ui/textarea";
-import { cityType } from "@/lib/Type";
+import { cityType, propertyType } from "@/lib/Type";
 import SelectedContry from "../form/SelectedContries";
 import ConterInput from "../form/ConterInput";
 import { Button } from "../ui/button";
@@ -28,8 +28,8 @@ function Editform({
   id,
 }: {
   city: cityType[];
-  property: typeof propertySchema;
-  id: string;
+  property: propertyType;
+  id: string | undefined;
 }) {
   console.log(property);
 

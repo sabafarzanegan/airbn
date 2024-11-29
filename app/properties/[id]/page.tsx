@@ -1,40 +1,53 @@
-import BookingWraper from "@/components/booking/BookingWraper";
-import Description from "@/components/home/Description";
-import FavoriteTogglebtn from "@/components/home/FavoriteTogglebtn";
-import PropertyDetails from "@/components/home/PropertyDetails";
-import PropertyRating from "@/components/home/PropertyRating";
-import SharedBtn from "@/components/home/SharedBtn";
-import SingleBread from "@/components/home/SingleBread";
-import Userinfo from "@/components/home/Userinfo";
-import PropertyReview from "@/components/Review/PropertyReview";
-import ReviewContainer from "@/components/Review/ReviewContainer";
+import dynamic from "next/dynamic";
 import {
   fetchBookingByPropertIdUser,
   fetchPropertyDetail,
   findExistingReview,
 } from "@/lib/actions/formAction";
-import { DetailProperty } from "@/lib/Type";
 import { auth } from "@clerk/nextjs/server";
 import Image from "next/image";
 import { redirect } from "next/navigation";
+import SingleBread from "@/components/home/SingleBread";
+import FavoriteTogglebtn from "@/components/home/FavoriteTogglebtn";
+import SharedBtn from "@/components/home/SharedBtn";
+import Description from "@/components/home/Description";
+
+const BookingWrapper = dynamic(
+  () => import("@/components/booking/BookingWraper"),
+  { ssr: false }
+);
+const PropertyReview = dynamic(
+  () => import("@/components/Review/PropertyReview")
+);
+const ReviewContainer = dynamic(
+  () => import("@/components/Review/ReviewContainer")
+);
+const PropertyDetails = dynamic(
+  () => import("@/components/home/PropertyDetails")
+);
+const Userinfo = dynamic(() => import("@/components/home/Userinfo"));
+const PropertyRating = dynamic(
+  () => import("@/components/home/PropertyRating")
+);
 
 async function page({ params }: { params: { id: string } }) {
   const detailProperty = await fetchPropertyDetail(params.id);
+  let specialBooking;
+  let reviewDoesNotExist;
 
   if (detailProperty) {
-    const specialBooking = await fetchBookingByPropertIdUser(
-      detailProperty?.id
-    );
-    return specialBooking;
+    specialBooking = await fetchBookingByPropertIdUser(detailProperty?.id);
   }
-  const { userId } = auth();
 
+  const { userId } = auth();
   const isNotOwner = detailProperty?.profile.clerkId !== userId;
 
-  const reviewDoesNotExist =
-    userId &&
-    isNotOwner &&
-    !(await findExistingReview(userId, detailProperty?.id));
+  if (detailProperty) {
+    reviewDoesNotExist =
+      userId &&
+      isNotOwner &&
+      !(await findExistingReview(userId, detailProperty?.id));
+  }
 
   if (!detailProperty) redirect("/");
   const detailes = {
@@ -47,6 +60,15 @@ async function page({ params }: { params: { id: string } }) {
     profileImage: detailProperty.profile.profileImage,
     name: detailProperty.profile.firstName,
     lastName: detailProperty.profile.lastName,
+  };
+  const bookingData = {
+    propertyId: detailProperty.id,
+    price: detailProperty.price,
+    bookings: detailProperty.bookings,
+    checkIn: specialBooking?.checkIn,
+    checkOut: specialBooking?.checkOut,
+    orderTotal: specialBooking?.orderTotal,
+    totalNights: specialBooking?.totalNights,
   };
   return (
     <section>
@@ -70,7 +92,6 @@ async function page({ params }: { params: { id: string } }) {
       <div className=" h-[300px] md:h-[500px] relative mt-8">
         <Image
           alt=""
-          priority
           className="object-cover rounded"
           fill
           sizes="100vw"
@@ -82,15 +103,7 @@ async function page({ params }: { params: { id: string } }) {
         {/* calender */}
         {isNotOwner && (
           <div className="flex-1">
-            <BookingWraper
-              propertyId={detailProperty.id}
-              price={detailProperty.price}
-              bookings={detailProperty.bookings}
-              checkIn={specialBooking?.checkIn}
-              checkOut={specialBooking?.checkOut}
-              orderTotal={specialBooking?.orderTotal}
-              totalNights={specialBooking?.totalNights}
-            />
+            <BookingWrapper {...bookingData} />
           </div>
         )}
 

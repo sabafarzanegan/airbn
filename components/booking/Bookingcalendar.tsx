@@ -19,7 +19,7 @@ export default function Bookingcalendar({
 }) {
   const { bookings, range } = useProperty((state) => state);
 
-  const [date, setDate] = useState([]);
+  const [date, setDate] = useState<string[]>([]);
   useEffect(() => {
     if (date.length === 2) {
       useProperty.setState({
@@ -27,18 +27,15 @@ export default function Bookingcalendar({
       });
       console.log(date);
       const range = calculateDateDifference(date);
-
-      useProperty.setState({ range: range + 1 });
+      if (range) {
+        useProperty.setState({ range: range + 1 });
+      }
       useProperty.setState({
         price: price,
         propertyId: propertyId,
       });
     }
   }, [date, propertyId, price]);
-  // useEffect(() => {
-  //   console.log("Updated bookings:", bookings);
-  //   console.log("Updated range:", range);
-  // }, [bookings]);
 
   useEffect(() => {
     useProperty.setState({
@@ -59,7 +56,7 @@ export default function Bookingcalendar({
         </h2>
         <DatePicker
           mapDays={({ date }) => {
-            let props = {};
+            let props = { className: "" };
             let isWeekend = [0, 6].includes(date.weekDay.index);
             if (isWeekend) props.className = "highlight highlight-red";
             return props;
@@ -68,7 +65,7 @@ export default function Bookingcalendar({
           value={date}
           onChange={(selectedDate) => {
             if (Array.isArray(selectedDate)) {
-              setDate(selectedDate.map((d) => d.format("YYYY/MM/DD")));
+              setDate(selectedDate.map((d: any) => d.format("YYYY/MM/DD")));
             } else {
               setDate(selectedDate.format("YYYY/MM/DD"));
             }

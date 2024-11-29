@@ -53,17 +53,17 @@ export type Booking = {
 };
 
 export type propertyType = {
-  name: string;
-  tagline: string;
-  price: number;
-  category: string;
-  description: string;
-  country: string;
-  guests: number;
-  bedrooms: string;
-  beds: number;
-  baths: number;
-  amenities: string;
+  name: string | undefined;
+  tagline: string | undefined;
+  price: number | undefined;
+  category: string | undefined;
+  description: string | undefined;
+  country: string | undefined;
+  guests: number | undefined;
+  bedrooms: number | undefined;
+  beds: number | undefined;
+  baths: number | undefined;
+  amenities: string | undefined;
 };
 
 export type DetailProperty = {
