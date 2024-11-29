@@ -32,6 +32,8 @@ const PropertyRating = dynamic(
 
 async function page({ params }: { params: { id: string } }) {
   const detailProperty = await fetchPropertyDetail(params.id);
+  console.log(detailProperty?.bookings);
+
   let specialBooking;
   let reviewDoesNotExist;
 

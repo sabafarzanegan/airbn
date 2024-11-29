@@ -32,6 +32,7 @@ function BookingWraper({
         <Bookingcalendar propertyId={propertyId} price={price} />
       )}
       {range > 0 && <Bookingcontainer />}
+
       {checkIn && (
         <BookingInfo
           checkIn={checkIn}

@@ -462,6 +462,7 @@ export const createBookingAction = async ({
         profileId: user.id,
       },
     });
+    window.location.reload();
 
     revalidatePath(`/properties/${propertyId}`);
   } catch (error) {
