@@ -14,7 +14,7 @@ import {
 export default function StatusFavoritebtn({
   favoriteId,
 }: {
-  favoriteId: string | null;
+  favoriteId: string | null | undefined;
 }) {
   const { pending } = useFormStatus();
   return (

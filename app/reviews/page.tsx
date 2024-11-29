@@ -1,14 +1,12 @@
 import Deletbtn from "@/components/Review/Deletbtn";
 import Rating from "@/components/Review/Rating";
-import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { fetchReviewByuser } from "@/lib/actions/formAction";
-import { Trash } from "lucide-react";
 import Image from "next/image";
 
 async function page() {
   const reviews = await fetchReviewByuser();
-  console.log(reviews);
+
   if (!reviews?.length) {
     return (
       <h1 className="font-semibold text-xl text-center">شما نظری ندادید</h1>
@@ -16,7 +14,7 @@ async function page() {
   }
 
   return (
-    <div>
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2">
       {reviews.map((review) => (
         <Card>
           <CardHeader>

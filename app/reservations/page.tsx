@@ -12,7 +12,6 @@ import Image from "next/image";
 
 async function page() {
   const reservations = await fetchReservations();
-  console.log(reservations);
 
   if (!reservations.length) {
     return <h1>هیچ آگهی از شما رزرو نشده است</h1>;

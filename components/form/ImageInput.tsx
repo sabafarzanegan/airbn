@@ -26,16 +26,17 @@ function ImageInput({
   });
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files[0];
+    const fileInput = e.target as HTMLInputElement;
 
-    if (file) {
-      setImage({
-        file: file,
-        name: file.name,
-        lastModified: file.lastModified,
-        size: file.size,
-        type: file.type,
-      });
+    if (fileInput.files && fileInput.files[0]) {
+      const file = fileInput.files[0];
+      if (file) {
+        setImage({
+          file: file,
+        });
+      }
+    } else {
+      console.error("No file selected or input is null.");
     }
   };
   const InputFileRef = useRef<HTMLInputElement | null>(null);

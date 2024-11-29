@@ -4,9 +4,9 @@ import { FIleImage } from "./Type";
 const bucket = "homeAway";
 
 const supabaseUrl = "https://npubsfsnwzoctizdjhvn.supabase.co";
-const supabaseKey = process.env.PUBLIC_SUPABASEKEY;
+const supabaseKey = process.env.NEXT_PUBLIC_SUPABASEKEY;
 
-const supabase = createClient(supabaseUrl, supabaseKey as string);
+const supabase = createClient(supabaseUrl as string, supabaseKey as string);
 export const UploadImameInSupabase = async (image: FIleImage) => {
   const Timestamp = Date.now();
   const newName = `${Timestamp}-${image.name}`;

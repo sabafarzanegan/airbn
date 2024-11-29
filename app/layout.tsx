@@ -4,7 +4,6 @@ import "./globals.css";
 import Navbar from "@/components/navbar/Navbar";
 import { ThemeProvider } from "../components/theme-provider";
 import { ClerkProvider } from "@clerk/nextjs";
-import Landing from "@/components/landing/Landing";
 
 const inter = Vazirmatn({ subsets: ["latin-ext"] });
 

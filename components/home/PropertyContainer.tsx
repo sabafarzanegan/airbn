@@ -1,6 +1,4 @@
 import { fetchProperties } from "@/lib/actions/formAction";
-// import PropertiesList from "./PropertiesList";
-// import EmptyList from "./EmptyList";
 import type { PropertPropsCard } from "@/lib/Type";
 import PropertCard from "./PropertCard";
 
@@ -15,7 +13,6 @@ async function PropertiesContainer({
     category,
     search,
   });
-  console.log(properties);
 
   if (properties?.length === 0) {
     return <p>موردی وجود ندارد</p>;

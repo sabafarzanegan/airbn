@@ -7,7 +7,7 @@ import { uploadImage } from "@/lib/actions/formAction";
 import { toast } from "@/hooks/use-toast";
 import { Loader2 } from "lucide-react";
 
-function ChangeImage({ id }: { id: string }) {
+function ChangeImage({ id }: { id: string | undefined }) {
   const [loading, setLoading] = useState(false);
   const [image, setImage] = useState({
     file: {
@@ -19,12 +19,15 @@ function ChangeImage({ id }: { id: string }) {
       type: "",
     },
   });
-  const inputRef = useRef(null);
+  const inputRef = useRef<HTMLInputElement>(null);
   const handleRef = () => {
-    inputRef.current.click();
+    if (inputRef.current) {
+      inputRef.current.click();
+    }
   };
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files[0];
+    const file = e.target?.files?.[0];
+
     if (file) {
       setImage({
         file: file,

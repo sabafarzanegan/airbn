@@ -13,15 +13,14 @@ async function PropertyRating({
   if (count === 0) return null;
 
   const countValue = `(${count}) ${inPage}`;
-  console.log(countValue);
 
   return (
     <span
-      className={`flex items-center gap-x-2 ${inPage ? "text-md" : "text-sm"}`}>
+      className={`flex items-center gap-x-1 ${inPage ? "text-md" : "text-sm"}`}>
       <span>
         <FaStar className="w-3 h-3" />
       </span>
-      <span>{convertToFarsi(rating)}</span>
+      <span>{convertToFarsi(Number(rating))}</span>
     </span>
   );
 }

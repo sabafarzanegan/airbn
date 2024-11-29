@@ -33,14 +33,14 @@ function BookingInfo({
         <div className="flex items-center justify-between">
           <span className="text-lg">تعداد شب</span>
           <span className="font-semibold ">
-            {convertToFarsi(totalNights)} شب
+            {convertToFarsi(Number(totalNights))} شب
           </span>
         </div>
         <Separator />
         <div className="flex items-center justify-between mt-2">
           <span className="text-lg">هزینه کل</span>
           <span className="font-semibold ">
-            {convertToFarsi(orderTotal)}
+            {convertToFarsi(Number(orderTotal))}
             <span className="px-1">تومان</span>
           </span>
         </div>

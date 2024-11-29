@@ -1,10 +1,9 @@
 "use server";
 import { clerkClient, currentUser } from "@clerk/nextjs/server";
-import { createProfileType, FIleImage } from "../Type";
+import { createProfileType, FIleImage, propertyType } from "../Type";
 import db from "../db";
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
-import { propertySchema } from "@/lib/schema";
 import { formatDate } from "date-fns";
 
 export const createProfileAction = async (formData: createProfileType) => {
@@ -15,19 +14,20 @@ export const createProfileAction = async (formData: createProfileType) => {
     if (existingUser === user?.emailAddresses[0].emailAddress) {
       return;
     } else {
-      const newUser = await db.profile.create({
-        data: {
-          clerkId: user?.id,
-          email: user?.emailAddresses[0].emailAddress,
-          profileImage: user?.imageUrl,
-          firstName: formData.firstName,
-          lastName: formData.lastName,
-          username: formData.username,
-        },
-      });
-      console.log(newUser);
+      if (user) {
+        const newUser = await db.profile.create({
+          data: {
+            clerkId: user.id,
+            email: user?.emailAddresses[0].emailAddress,
+            profileImage: user?.imageUrl,
+            firstName: formData.firstName,
+            lastName: formData.lastName,
+            username: formData.username,
+          },
+        });
+      }
 
-      await clerkClient.users.updateUserMetadata(user?.id, {
+      await clerkClient.users.updateUserMetadata(user?.id as string, {
         privateMetadata: { hasProfile: true },
       });
     }
@@ -167,7 +167,7 @@ export const getCenter = async () => {
 };
 
 export const createPropertyAction = async (
-  formData: typeof propertySchema,
+  formData: propertyType,
   path: string
 ) => {
   const user = await getAuthuser();
@@ -251,7 +251,7 @@ export const fetchFavoriteId = async ({
 
 export const toggleFavoriteAction = async (prevState: {
   propertyId: string;
-  favoriteId: string | null;
+  favoriteId: string | null | undefined;
 }) => {
   const user = await getAuthuser();
   const { propertyId, favoriteId } = prevState;
@@ -269,10 +269,8 @@ export const toggleFavoriteAction = async (prevState: {
           profileId: user.id,
         },
       });
-      console.log(newFavorit);
     }
   } catch (error) {
-    return null;
   } finally {
     revalidatePath("/");
   }
@@ -434,7 +432,7 @@ export async function fetchPropertyRating(propertyId: string) {
       count: result[0]?._count.rating ?? 0,
     };
   } catch (error) {
-    return null;
+    return { rating: 0, count: 0 };
   }
 }
 
@@ -464,9 +462,8 @@ export const createBookingAction = async ({
         profileId: user.id,
       },
     });
-    console.log(newBookings);
+
     revalidatePath(`/properties/${propertyId}`);
-    return { success: true, message: "رزرو با موفقیت انجام شد" };
   } catch (error) {
     console.log(error);
   } finally {
@@ -691,7 +688,13 @@ export const fetchRentalDetails = async (propertyId: string) => {
   });
 };
 
-export const updatePropertyAction = async (formatDate, id) => {
+export const updatePropertyAction = async ({
+  formatDate,
+  id,
+}: {
+  formatDate: propertyType;
+  id: string;
+}) => {
   const user = await getAuthuser();
   console.log(formatDate);
   try {
@@ -713,7 +716,7 @@ export const updatePropertyAction = async (formatDate, id) => {
   }
 };
 
-export const uploadImage = async (data: string, id: string) => {
+export const uploadImage = async (data: string, id: string | undefined) => {
   const user = await getAuthuser();
   try {
     await db.property.update({

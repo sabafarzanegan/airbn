@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/table";
 import { fetchRentals } from "@/lib/actions/formAction";
 import { convertToFarsi } from "@/lib/utils";
-import { Edit, Trash } from "lucide-react";
+import { Edit } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 
