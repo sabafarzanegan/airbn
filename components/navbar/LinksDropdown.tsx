@@ -20,13 +20,13 @@ function LinksDropdown() {
           <SignedOut>
             <SignInButton mode="modal">
               <Button className="w-full " variant="secondary">
-                ورود
+                <SheetClose>ورود</SheetClose>
               </Button>
             </SignInButton>
 
             <SignUpButton mode="modal">
               <Button className="w-full" variant="default">
-                ثبت نام
+                <SheetClose>ثبت نام</SheetClose>
               </Button>
             </SignUpButton>
           </SignedOut>
@@ -42,8 +42,9 @@ function LinksDropdown() {
                 );
               })}
             </div>
-
-            <SignOutLink />
+            <SheetClose>
+              <SignOutLink />
+            </SheetClose>
           </SignedIn>
         </div>
       </SheetContent>

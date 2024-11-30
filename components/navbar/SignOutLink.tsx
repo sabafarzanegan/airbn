@@ -3,6 +3,7 @@ import { useToast } from "@/hooks/use-toast";
 import { SignOutButton } from "@clerk/nextjs";
 import { LogOut } from "lucide-react";
 import { Button } from "../ui/button";
+
 function SignOutLink() {
   const { toast } = useToast();
   const handlelogout = () => {
